@@ -1,6 +1,12 @@
-import datetime
+from django.utils import timezone
 
 from django.db import models
+
+
+# Функция для установления автоматического дедлайна в 7 дней
+def default_deadline():
+    return timezone.now() + timezone.timedelta(days=7)
+
 
 class Board(models.Model):
     name = models.CharField(max_length=50)
@@ -56,8 +62,8 @@ class Task(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=250)
     priority = models.IntegerField(default=0)
-    create_date = models.DateTimeField(default=datetime.datetime.now())
-    deadline = models.DateTimeField(default=0)
+    create_date = models.DateTimeField(default=timezone.now)
+    deadline = models.DateTimeField(default=default_deadline)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     mark = models.ForeignKey(Mark, on_delete=models.DO_NOTHING)
 
